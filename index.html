@@ -1,0 +1,278 @@
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BLAZE AI</title>
+<script src="https://js.puter.com/v2/"></script>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#050914;color:#eef6ff;font-family:Arial,sans-serif}
+header{padding:18px;background:#0b1425;border-bottom:1px solid #16304b}
+header h2{margin:0;color:#20d9ff;letter-spacing:2px}
+header small{color:#8ba5bc}
+nav{display:flex;gap:8px;padding:12px;overflow-x:auto;background:#08111f}
+nav button,.btn{border:1px solid #17415b;background:#0d2033;color:#dff8ff;padding:11px 14px;border-radius:10px;white-space:nowrap}
+nav button.active,.btn.primary{background:#087c9d;border-color:#20d9ff}
+main{padding:16px;max-width:850px;margin:auto}
+.page{display:none}
+.page.active{display:block}
+.card{background:#0c192a;border:1px solid #17344d;border-radius:15px;padding:16px;margin:12px 0}
+h3{color:#35dfff}
+.orb{width:110px;height:110px;border-radius:50%;margin:20px auto;background:radial-gradient(circle,#fff,#18dfff 25%,#07527d 65%,#061326);box-shadow:0 0 35px #00cfff;animation:pulse 2s infinite}
+@keyframes pulse{50%{box-shadow:0 0 60px #00cfff}}
+input,textarea,select{width:100%;padding:13px;background:#071321;color:white;border:1px solid #24506c;border-radius:9px;margin:7px 0}
+textarea{min-height:85px;resize:vertical}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.row>*{flex:1}
+#messages{height:48vh;overflow-y:auto;background:#071321;border-radius:12px;padding:12px}
+.msg{padding:11px;margin:8px 0;border-radius:10px;white-space:pre-wrap;overflow-wrap:anywhere}
+.user{background:#123b55;margin-left:12%}
+.bot{background:#152438;margin-right:12%}
+.muted{color:#91a8bb;font-size:13px}
+.status{color:#42e7a2}
+footer{text-align:center;padding:25px;color:#71889d}
+</style>
+</head>
+<body>
+
+<header>
+<h2>⚡ BLAZE AI</h2>
+<small>YOUR PERSONAL AI ASSISTANT</small>
+</header>
+
+<nav>
+<button class="active" onclick="showPage('home',this)">Home</button>
+<button onclick="showPage('chat',this)">AI Chat</button>
+<button onclick="showPage('editor',this)">Video Editor</button>
+<button onclick="showPage('video',this)">Video Generator</button>
+<button onclick="showPage('youtube',this)">YouTube</button>
+<button onclick="showPage('study',this)">Study</button>
+<button onclick="showPage('settings',this)">Settings</button>
+</nav>
+
+<main>
+<section id="home" class="page active">
+<div class="card" style="text-align:center">
+<div class="orb"></div>
+<h2>BLAZE SYSTEM ONLINE</h2>
+<p class="status">● READY TO ASSIST</p>
+<p class="muted">Your AI-powered personal workspace</p>
+<button class="btn primary" onclick="showPage('chat')">Start AI Chat</button>
+</div>
+<div class="card">
+<h3>My AI Modules</h3>
+<p>🤖 AI Assistant</p>
+<p>🎬 Video Editing</p>
+<p>✨ AI Video Generator</p>
+<p>▶️ YouTube Manager</p>
+<p>📚 Study Assistant</p>
+</div>
+</section>
+
+<section id="chat" class="page">
+<div class="card">
+<h3>🤖 BLAZE AI CHAT</h3>
+<p class="muted">Mode: <span id="modeLabel">Puter AI</span></p>
+<div id="messages"></div>
+<textarea id="prompt" placeholder="BLAZE AI se kuch bhi pucho..."></textarea>
+<div class="row">
+<button class="btn primary" onclick="sendMessage()">SEND ➤</button>
+<button class="btn" onclick="voiceInput()">🎤 VOICE</button>
+<button class="btn" onclick="clearChat()">CLEAR</button>
+</div>
+<p class="muted" id="chatStatus">Ready.</p>
+</div>
+</section>
+
+<section id="editor" class="page">
+<div class="card">
+<h3>🎬 VIDEO EDITOR</h3>
+<p>Yahan future mein video editing tools connect honge.</p>
+<p class="muted">Abhi editing integration active nahi hai.</p>
+</div>
+</section>
+
+<section id="video" class="page">
+<div class="card">
+<h3>✨ AI VIDEO GENERATOR</h3>
+<textarea placeholder="Apni video ka idea likho..."></textarea>
+<button class="btn primary" onclick="alert('Video generator integration abhi setup nahi hai.')">Generate Video</button>
+<p class="muted">Video generation service connect karna abhi baaki hai.</p>
+</div>
+</section>
+
+<section id="youtube" class="page">
+<div class="card">
+<h3>▶️ YOUTUBE MANAGER</h3>
+<p>Future features: channel planning, titles, descriptions aur upload assistance.</p>
+<p class="muted">YouTube account integration abhi active nahi hai.</p>
+</div>
+</section>
+
+<section id="study" class="page">
+<div class="card">
+<h3>📚 STUDY ASSISTANT</h3>
+<p>Class 10 Bihar Board ke questions yahan AI se pooch sakte ho.</p>
+<button class="btn primary" onclick="showPage('chat')">Ask BLAZE AI</button>
+</div>
+</section>
+
+<section id="settings" class="page">
+<div class="card">
+<h3>⚙️ AI SETTINGS</h3>
+<label>Choose AI Mode</label>
+<select id="aiMode" onchange="changeMode()">
+<option value="puter">Option 1 - Puter AI (No personal API key)</option>
+<option value="backend">Option 2 - My API Key (Secure Backend)</option>
+</select>
+
+<div id="puterInfo">
+<p class="status">Puter AI selected</p>
+<p class="muted">Puter may ask you to sign in. Its usage and any charges follow Puter's current terms.</p>
+</div>
+
+<div id="backendInfo" style="display:none">
+<label>Backend URL</label>
+<input id="backendUrl" placeholder="https://your-worker.workers.dev">
+<p class="muted">Your API key must be stored as a Secret on your backend host. Never paste it here or in this HTML file.</p>
+</div>
+<button class="btn primary" onclick="saveSettings()">Save Settings</button>
+</div>
+<div class="card">
+<h3>Chat History</h3>
+<p class="muted">Chat history is saved on this device only.</p>
+<button class="btn" onclick="clearChat()">Delete Chat History</button>
+</div>
+</section>
+</main>
+
+<footer>BLAZE AI • VERSION 2.0</footer>
+
+<script>
+let history = [];
+try {
+  history = JSON.parse(localStorage.getItem("blaze_chat_history") || "[]");
+} catch(e) { history = []; }
+
+function showPage(id,btn){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
+  if(btn) btn.classList.add("active");
+}
+
+function saveHistory(){
+  localStorage.setItem("blaze_chat_history",JSON.stringify(history));
+}
+
+function renderHistory(){
+  const box=document.getElementById("messages");
+  box.innerHTML="";
+  history.forEach(m=>{
+    const div=document.createElement("div");
+    div.className="msg "+(m.role==="user"?"user":"bot");
+    div.textContent=(m.role==="user"?"YOU: ":"BLAZE: ")+m.content;
+    box.appendChild(div);
+  });
+  box.scrollTop=box.scrollHeight;
+}
+
+function addMessage(role,content){
+  history.push({role,content});
+  saveHistory();
+  renderHistory();
+}
+
+function changeMode(){
+  const mode=document.getElementById("aiMode").value;
+  document.getElementById("puterInfo").style.display=mode==="puter"?"block":"none";
+  document.getElementById("backendInfo").style.display=mode==="backend"?"block":"none";
+  document.getElementById("modeLabel").textContent=mode==="puter"?"Puter AI":"My API Key";
+}
+
+function saveSettings(){
+  const mode=document.getElementById("aiMode").value;
+  const url=document.getElementById("backendUrl").value.trim();
+  if(mode==="backend" && !url.startsWith("https://")){
+    alert("Valid HTTPS Backend URL dalo.");
+    return;
+  }
+  localStorage.setItem("blaze_mode",mode);
+  if(url) localStorage.setItem("blaze_backend_url",url);
+  document.getElementById("chatStatus").textContent="Settings saved.";
+  changeMode();
+}
+
+async function sendMessage(){
+  const input=document.getElementById("prompt");
+  const text=input.value.trim();
+  if(!text)return;
+  input.value="";
+  addMessage("user",text);
+  const status=document.getElementById("chatStatus");
+  status.textContent="BLAZE is thinking...";
+  try{
+    let answer="";
+    const mode=document.getElementById("aiMode").value;
+
+    if(mode==="puter"){
+      if(!window.puter){
+        throw new Error("Puter load nahi hua. Page ko internet ke saath hosted/served mode mein kholo.");
+      }
+      const previous=history.slice(-12).map(m=>({
+        role:m.role,
+        content:m.content
+      }));
+      const response=await puter.ai.chat(previous);
+      answer=typeof response==="string"
+        ? response
+        : response?.message?.content || response?.text || JSON.stringify(response);
+    } else {
+      const url=document.getElementById("backendUrl").value.trim()
+        || localStorage.getItem("blaze_backend_url");
+      if(!url) throw new Error("Pehle Settings mein Backend URL add karo.");
+      const response=await fetch(url,{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({message:text})
+      });
+      const data=await response.json();
+      if(!response.ok || data.error) throw new Error(data.error || "Backend error");
+      answer=data.choices?.[0]?.message?.content || data.reply || "No response received.";
+    }
+    addMessage("assistant",answer);
+    status.textContent="● Reply received";
+  }catch(error){
+    addMessage("assistant","Error: "+error.message);
+    status.textContent="Please check your connection/settings.";
+  }
+}
+
+function clearChat(){
+  if(confirm("Kya tum chat history delete karna chahte ho?")){
+    history=[];
+    saveHistory();
+    renderHistory();
+  }
+}
+
+function voiceInput(){
+  const Speech=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!Speech){alert("Voice input is not supported in this browser.");return;}
+  const rec=new Speech();
+  rec.lang="hi-IN";
+  rec.onresult=e=>{
+    document.getElementById("prompt").value=e.results[0][0].transcript;
+  };
+  rec.start();
+}
+
+document.getElementById("aiMode").value=localStorage.getItem("blaze_mode")||"puter";
+document.getElementById("backendUrl").value=localStorage.getItem("blaze_backend_url")||"";
+changeMode();
+renderHistory();
+</script>
+</body>
+</html>
